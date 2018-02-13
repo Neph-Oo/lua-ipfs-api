@@ -1,0 +1,11 @@
+*.so
+*.[oa]
+*.dll
+*.ba[kc]
+*.back
+*.save
+*.bin
+*.rock
+*.rockspec
+.vscode
+.vs*
