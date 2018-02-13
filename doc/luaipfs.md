@@ -1,9 +1,9 @@
 
 ## Comments
-Due to Lua language and because I don't want to deal with non-blocking functions, it's not possible to use the following api without blocking and ipfs (more precisely, exploring a dht) can take **a lot of time** before returning results.   
+Due to Lua language and because this module don't use non-blocking functions, it's not possible to use the following api without blocking and ipfs (more precisely, exploring a dht) can take **a lot of time** before returning results.    
 For that reason, I recommend using C and create Lua states for running ipfs instances in different threads. You can also use [Lanes](https://lualanes.github.io/lanes/) who will handle that for you.  
 
-I've added some functions for retrieving big files. Search for functions like *adv_xxx()*, you can register a callback that will be call regularly when new data are available.     
+I've added some functions for downloading big files. Search for functions like *adv_xxx()*, you can register a callback function that will be call regularly when new data are available.     
 
 
 
