@@ -38,7 +38,7 @@ Of course, you can do a lot more. Read the documentation.
 
 ## Documentation
 
-See *doc/lipfs.md* for a list of available functions.
+See *doc/luaipfs.md* for a list of available functions.
 
 Or ```luarocks doc luaipfs```.
 
@@ -46,4 +46,4 @@ Some useful informations can be found on the ipfs website.
 The API reference is here: https://ipfs.io/docs/api/.
 
 
-De la doc en français est également disponible à cette addresse: https://wifi.gauf.re/p2p/lua-ipfs-api (wip)
+De la doc en français est également disponible à cette adresse: https://wiki.gauf.re/p2p/lua-ipfs-api (wip)
