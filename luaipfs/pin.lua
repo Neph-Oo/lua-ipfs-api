@@ -21,7 +21,7 @@ function pin:pin_rm (ipfs_path)
       return false, "Invalid parameter #1 (string expected, got " .. type(ipfs_path) .. ")"
    end
 
-   local res, http_ret, err =  self.http:get("/api/v0/pin/rm?arg=" .. ipfs_path)
+   local res, http_ret, err =  self.http:post("/api/v0/pin/rm?arg=" .. ipfs_path)
    if not res then
       if err and not is_json(err) then return false, err end
       return false, err and (json.decode(err)).Message or http_ret

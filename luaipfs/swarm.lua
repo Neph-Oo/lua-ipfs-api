@@ -33,7 +33,7 @@ function swarm:swarm_peers (prot, latency)
       .. tostring(prot) .. "&latency=" .. tostring(latency)
    
 
-   local res, http_ret, err =  self.http:get(api_call)
+   local res, http_ret, err =  self.http:post(api_call)
    if not res then
       if err and not is_json(err) then return false, err end
       return false, err and (json.decode(err)).Message or http_ret

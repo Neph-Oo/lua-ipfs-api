@@ -65,7 +65,7 @@ function base:get (ipfs_path, out_path)
    end
 
 
-   local res, http_ret, err = self.http:get("/api/v0/get?arg=" .. ipfs_path, out_path)
+   local res, http_ret, err = self.http:post("/api/v0/get?arg=" .. ipfs_path, out_path)
    if not res then
       if err and not is_json(err) then return false, err end
       return false, err and (json.decode(err)).Message or http_ret
@@ -83,7 +83,7 @@ function base:adv_get (ipfs_path, cb_func)
       return false, "Invalid parameter #1 (function expected, got " .. type(cb_func) .. ")"
    end
 
-   local res, http_ret, err = self.http:get_cb("/api/v0/get?arg=" .. ipfs_path, ipfs_path, cb_func)
+   local res, http_ret, err = self.http:post_cb("/api/v0/get?arg=" .. ipfs_path, ipfs_path, cb_func)
    if not res then
       if err and not is_json(err) then return false, err end
       return false, err and (json.decode(err)).Message or http_ret
@@ -105,7 +105,7 @@ function base:cat (ipfs_path, out_path)
    end
 
 
-   local res, http_ret, err = self.http:get("/api/v0/cat?arg=" .. ipfs_path, out_path)
+   local res, http_ret, err = self.http:post("/api/v0/cat?arg=" .. ipfs_path, out_path)
    if not res then
       if err and not is_json(err) then return false, err end
       return false, err and (json.decode(err)).Message or http_ret
@@ -123,7 +123,7 @@ function base:adv_cat (ipfs_path, cb_func)
       return false, "Invalid parameter #1 (function expected, got " .. type(cb_func) .. ")"
    end
 
-   local res, http_ret, err = self.http:get_cb("/api/v0/cat?arg=" .. ipfs_path, ipfs_path, cb_func)
+   local res, http_ret, err = self.http:post_cb("/api/v0/cat?arg=" .. ipfs_path, ipfs_path, cb_func)
    if not res then
       if err and not is_json(err) then return false, err end
       return false, err and (json.decode(err)).Message or http_ret
@@ -205,7 +205,7 @@ function base:ls (ipfs_path)
       return false, "Invalid parameter #1 (string expected, got " .. type(ipfs_path) .. ")"
    end
 
-   local res, http_ret, err = self.http:get("/api/v0/ls?arg=" .. ipfs_path)
+   local res, http_ret, err = self.http:post("/api/v0/ls?arg=" .. ipfs_path)
    if not res then
       if err and not is_json(err) then return false, err end
       return false, err and (json.decode(err)).Message or http_ret
@@ -235,7 +235,7 @@ function base:id (node_id)
 
    local req = node_id and ("/api/v0/id?arg=" .. node_id) or "/api/v0/id"
 
-   local res, http_ret, err = self.http:get(req)
+   local res, http_ret, err = self.http:post(req)
    if not res then
       if err and not is_json(err) then return false, err end
       return false, err and (json.decode(err)).Message or http_ret

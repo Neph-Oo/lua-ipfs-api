@@ -37,12 +37,11 @@ function dht:dht_findpeer (nodeid)
       return false, "Invalid parameter #1 (string expected, got " .. type(nodeid) .. ")"
    end
 
-   local res, http_ret, err = self.http:get("/api/v0/dht/findpeer?arg=" .. nodeid)
+   local res, http_ret, err = self.http:post("/api/v0/dht/findpeer?arg=" .. nodeid)
    if not res then
       if err and not is_json(err) then return false, err end
       return false, err and (json.decode(err)).Message or http_ret
    end
-
 
    --Parse each line from answer
    
@@ -81,7 +80,7 @@ function dht:dht_findprovs (key)
       return false, "Invalid parameter #1 (string expected, got " .. type(key) .. ")"
    end
 
-   local res, http_ret, err = self.http:get("/api/v0/dht/findprovs?arg=" .. key)
+   local res, http_ret, err = self.http:post("/api/v0/dht/findprovs?arg=" .. key)
    if not res then
       if err and not is_json(err) then return false, err end
       return false, err and (json.decode(err)).Message or http_ret
@@ -117,7 +116,7 @@ function dht:dht_get (key)
       return false, "Invalid parameter #1 (string expected, got " .. type(key) .. ")"
    end
 
-   local res, http_ret, err = self.http:get("/api/v0/dht/get?arg=" .. key)
+   local res, http_ret, err = self.http:post("/api/v0/dht/get?arg=" .. key)
    if not res then
       if err and not is_json(err) then return false, err end
       return false, err and (json.decode(err)).Message or http_ret
@@ -155,7 +154,7 @@ function dht:dht_put (key, value)
       return false, "Invalid parameter #2 (string expected, got " .. type(value) .. ")"
    end
 
-   local res, http_ret, err = self.http:get("/api/v0/dht/put?arg=" .. key .. "&arg=" .. value)
+   local res, http_ret, err = self.http:post("/api/v0/dht/put?arg=" .. key .. "&arg=" .. value)
    if not res then
       if err and not is_json(err) then return false, err end
       return false, err and (json.decode(err)).Message or http_ret
@@ -189,7 +188,7 @@ function dht:dht_query (node_id)
       return false, "Invalid parameter #1 (string expected, got " .. type(node_id) .. ")"
    end
 
-   local res, http_ret, err = self.http:get("/api/v0/dht/query?arg=" .. node_id)
+   local res, http_ret, err = self.http:post("/api/v0/dht/query?arg=" .. node_id)
    if not res then
       if err and not is_json(err) then return false, err end
       return false, err and (json.decode(err)).Message or http_ret
@@ -222,7 +221,7 @@ function dht:dht_provide (key)
       return false, "Invalid parameter #1 (string expected, got " .. type(key) .. ")"
    end
 
-   local res, http_ret, err = self.http:get("/api/v0/dht/provide?arg=" .. key)
+   local res, http_ret, err = self.http:post("/api/v0/dht/provide?arg=" .. key)
    if not res then
       if err and not is_json(err) then return false, err end
       return false, err and (json.decode(err)).Message or http_ret

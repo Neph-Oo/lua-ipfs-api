@@ -11,17 +11,17 @@
 
 static int ipfs_http_new (lua_State *);
 
-static int ipfs_http_get (lua_State *);
+static int ipfs_http_post (lua_State *);
 
-static int ipfs_http_get_cb (lua_State *);
+static int ipfs_http_post_cb (lua_State *);
 
 static int ipfs_post_multipart_data (lua_State *);
 
 
 static const struct luaL_Reg ipfs_http[] = {
    { "new", ipfs_http_new },
-   { "get", ipfs_http_get },
-   { "get_cb", ipfs_http_get_cb },
+   { "post", ipfs_http_post },
+   { "post_cb", ipfs_http_post_cb },
    { "post_multipart_data", ipfs_post_multipart_data },
    { NULL, NULL }
 };
@@ -79,7 +79,7 @@ static int ipfs_http_new (lua_State *L) {
 
 
 
-static int ipfs_http_get (lua_State *L) {
+static int ipfs_http_post (lua_State *L) {
    CURL *curl; CURLcode ret;
    const char *url;
    writeback_buffer buffer = {'\x00'};
@@ -152,6 +152,9 @@ static int ipfs_http_get (lua_State *L) {
    curl_easy_setopt(curl, CURLOPT_LOW_SPEED_LIMIT, 50);
    curl_easy_setopt(curl, CURLOPT_LOW_SPEED_TIME, timeout);
 
+   curl_easy_setopt(curl, CURLOPT_POST, 1);
+   curl_easy_setopt(curl, CURLOPT_POSTFIELDSIZE, 0);
+
    if (!fd)
       curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, cb_write_to_buffer);
    else
@@ -164,12 +167,12 @@ static int ipfs_http_get (lua_State *L) {
 
 
 
-
    //Perform request, return answer||true||false and http response code + optional err
 
    ret = curl_easy_perform(curl);
    if (ret != CURLE_OK && ret != CURLE_OPERATION_TIMEDOUT)
       module_error(L, (char *)curl_easy_strerror(ret));
+
 
 
    if (buffer.base.hs.tot_items < 1 || buffer.base.error || ret == CURLE_OPERATION_TIMEDOUT) {
@@ -230,7 +233,7 @@ static int ipfs_http_get (lua_State *L) {
 
 
 
-static int ipfs_http_get_cb (lua_State *L) {
+static int ipfs_http_post_cb (lua_State *L) {
    CURL *curl; CURLcode ret;
    int i; const char *url;
    writeback_luacb cb = {'\x00'};
@@ -297,6 +300,10 @@ static int ipfs_http_get_cb (lua_State *L) {
    curl_easy_setopt(curl, CURLOPT_NOPROGRESS, 1);
    curl_easy_setopt(curl, CURLOPT_LOW_SPEED_LIMIT, 50);
    curl_easy_setopt(curl, CURLOPT_LOW_SPEED_TIME, timeout);
+   
+   curl_easy_setopt(curl, CURLOPT_POST, 1);
+   curl_easy_setopt(curl, CURLOPT_POSTFIELDSIZE, 0);
+
 
    curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, cb_write_to_luacb);
    curl_easy_setopt(curl, CURLOPT_WRITEDATA, &cb);
