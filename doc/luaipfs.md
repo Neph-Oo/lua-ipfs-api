@@ -1,9 +1,9 @@
 
 ## Comments
 Due to Lua language and because this module don't use non-blocking functions, it's not possible to use the following api without blocking and ipfs (more precisely, exploring a dht) can take **a lot of time** before returning results.    
-For that reason, I recommend using C and create Lua states for running ipfs instances in different threads. You can also use [Lanes](https://lualanes.github.io/lanes/) who will handle that for you.  
+For that reason, I recommend to use C and create Lua states for running luaipfs instances in different threads. You can also use [Lanes](https://lualanes.github.io/lanes/) who will handle that for you.  
 
-I've added some functions for downloading big files. Search for functions like *adv_xxx()*, you can register a callback function that will be call regularly when new data are available.     
+I've added some functions for downloading big files without taking a lot of memory. Search for functions like *adv_xxx()*. You can register a function callback that will be called when new data are available.     
 
 
 
@@ -120,10 +120,10 @@ function callback (ipfs_path, data_chunk, datasize)
 
 ___
 #### ipfs:dht\_findpeer(node_id)
-*Search a peer in the dht*
+*Search for a peer in the dht*
 
 ###### Args:
-> node_id (string) : node id to search for
+> node_id (string) : node/peer id to search for
 
 ###### Return:
 > A list containing each known ipfs multiaddress of peer.
@@ -147,25 +147,8 @@ ___
 
 
 ___
-#### ipfs:dht_get(key)
-*Retrieve a value from the dht.  
-Warn: use this command only if you know what you're doing. Result can vary between
-implementation. For example, in go-ipfs, key is in the form /namespace/multihash(key) where namespace
-can only be /ipns, key should correspond to a node.*
-
-###### Args:
-> key (string) : key (multihash) to search for
-
-###### Return:
-> Arbitrary data value.
-
-> Or false and an error.
-
-
-
-___
 #### ipfs:dht_provide(key)
-*Announce to the dht who can provide value for key (register/refresh entry for key).*
+*Announce to the dht we can provide data corresponding to key (register/refresh entry for key).*
 
 ###### Args:
 > key (string) : key (multihash) to provide
@@ -178,20 +161,38 @@ ___
 
 
 
+___
+#### ipfs:dht_get(key, mode)
+*Retrieve a value from the dht if a corresponding key exist.*  
+
+*Warn : use this command only if you know what you're doing. Result can vary between implementation. For example, in go-ipfs, key is in the form /keytype/keyname(multihash) where keytype can only be /ipns. In IPNS context, dht_get will return a valid IPNS record (protobuf) which is valid and has the highest sequence number. If you really want to use this, look at dht_advanced.lua in example directory.*
+  
+
+###### Args:
+> key (string) : key (multihash) to search for
+> mode (string) : mode can be "lua", "raw" (protobuf) or "b64" (base64)
+
+###### Return:
+> Arbitrary data value (IPNS record for /ipns in lua, raw or b64 encoding).
+
+> Or false and an error.
+
+
+
 
 ___
 #### ipfs:dht_put(key, value)
-*Set a key/value in the dht.   
-Warn: use this command only if you know what you're doing. Result can vary between
-implementation. For example, in go-ipfs, key is in the form /namespace/multihash(key) where namespace
-can only be /ipns, key should correspond to a node and data have to be signed/serialized*
+*Set a key/value in the dht.*
+
+*Warn: use this command only if you know what you're doing. Result can vary between implementation. For example, in go-ipfs, key is in the form /keytype/keyname(multihash) where keytype can only be /ipns. Keyname should correspond to a peer id (multihash of a user's public key) and data should be an IPNS record (protobuf) signed with the user's private key. If you really want to use this, look at dht_advanced.lua in example directory.*
 
 ###### Args:
-> key (string) : key for storing value 
-> value (string) : data
+> key (string) : peer id (or another user's public key hash) 
+> value (string) : IPNS record (protobuf .pb file)
 
 ###### Return:
-> A list of peer (node id) where we have store value in dht (I'm not sure what "type 5" is in that case, so I have guess it.. if you know that statement is false, tell me).
+> A list of peers/neighbors (node id) where we have store value in the dht. 
+> *(I'm not sure what "type 5" is in that case, so I have guess it.. if you know that statement is false, tell me).*
 
 > Or false and an error.
 
@@ -199,7 +200,7 @@ can only be /ipns, key should correspond to a node and data have to be signed/se
 
 ___
 #### ipfs:dht_query(node_id)
-*Search for peers in the dht. Somehow like findpeer but node_id doesn't have to exist. It will return a list of closest peers of node_id.*
+*Search for peers in the dht. Somehow like findpeer but node_id doesn't have to exist. It will return a list of closest peers of node_id (xor routing).*
 
 ###### Args:
 > node_id (string) : node id to search for
