@@ -47,7 +47,6 @@ end
 --(Re)provide/announce to the DHT that we have a file corresponding to the given key (file should exist in ipfs db). 
 --Key correspond to the ipfs documentation directory (pined by default with go-ipfs).
 
---[[
 local key = "QmQPeNsJPyVWPFDVHb77w8G42Fvo15z4bG2X8D2GhfbSXc"
 
 local ret, err = ipfs:dht_provide(key)
@@ -57,7 +56,7 @@ if not ret then
 end
 
 print(ret)
-]]
+
 
 
 

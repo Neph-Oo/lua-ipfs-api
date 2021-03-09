@@ -9,9 +9,9 @@ local ipfs = lipfs:new()
 
 --Retrieve a file in data buffer
 
-local file = io.open("dot.gif", "w+")
+local file = io.open("quick-start", "w+")
 local data, err = 
-   ipfs:cat("/ipfs/QmbZN6yqZF51dZVDP6NR9pksrwh3Tdh1wEwWZ75vRHd1m4/subdir/dotlink.gif")
+   ipfs:cat("/ipfs/QmQPeNsJPyVWPFDVHb77w8G42Fvo15z4bG2X8D2GhfbSXc/quick-start")
 if err then print(err) elseif file then file:write(data) end
 
 file:close()
@@ -22,10 +22,10 @@ file:close()
 
 
 
---Retrieve a file to path "qemu.png"
+--Retrieve a file to path "help"
 
 local ret, err = 
-   ipfs:cat("/ipfs/QmbZN6yqZF51dZVDP6NR9pksrwh3Tdh1wEwWZ75vRHd1m4/qemu_glitch.png", "qemu.png")
+   ipfs:cat("/ipfs/QmQPeNsJPyVWPFDVHb77w8G42Fvo15z4bG2X8D2GhfbSXc/help", "help")
 if err then print(err) end
 
 
@@ -37,7 +37,7 @@ if err then print(err) end
 --Retrieve an archive (file.s or directories) to path
 
 local ret, err =
-   ipfs:get("/ipfs/QmbZN6yqZF51dZVDP6NR9pksrwh3Tdh1wEwWZ75vRHd1m4/subdir", "myarchive.tar")
+   ipfs:get("/ipfs/QmQPeNsJPyVWPFDVHb77w8G42Fvo15z4bG2X8D2GhfbSXc", "myarchive.tar")
 if err then print(err) end
 
 
@@ -49,7 +49,7 @@ if err then print(err) end
 --Set a callback function cb_func that will be call many times (until there is no more data) 
 --during adv_cat function call.
 
-local file = io.open("dot_copy.gif", "w+")
+local file = io.open("quick-start-copy", "w+")
 local curr_size = 0
 local function cb_func (ipfs_path, data, filesize)
    curr_size = curr_size + #data
@@ -61,7 +61,7 @@ end
 
 
 local ret, err = 
-   ipfs:adv_cat("/ipfs/QmbZN6yqZF51dZVDP6NR9pksrwh3Tdh1wEwWZ75vRHd1m4/subdir/dotlink.gif", cb_func)
+   ipfs:adv_cat("/ipfs/QmQPeNsJPyVWPFDVHb77w8G42Fvo15z4bG2X8D2GhfbSXc/quick-start", cb_func)
 if not ret then print(err) end
 
 file:close()

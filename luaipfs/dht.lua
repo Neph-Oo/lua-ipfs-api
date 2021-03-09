@@ -111,7 +111,7 @@ end
 
 
 
-function dht:dht_get (key)
+function dht:dht_get (key, mode)
    if not key or type(key) ~= "string" then
       return false, "Invalid parameter #1 (string expected, got " .. type(key) .. ")"
    end
@@ -140,6 +140,19 @@ function dht:dht_get (key)
    end
 
    if not value then return false, "no value found in dht" end
+
+   --Select return value 
+   mode = mode or "raw"
+   if mode == "raw" then
+      value = self.b64_decode(value)
+      if not value then return false, "invalid b64 encoding" end
+   elseif mode == "b64" then
+      value = value
+   elseif mode == "lua" then
+      value = self.pb_decode("IpnsEntry", self.b64_decode(value))
+      if not value then return false, "invalid protobuf schema" end
+   end
+
    return value
 end
 
@@ -147,23 +160,38 @@ end
 
 --Note, https://github.com/ipfs/go-ipfs/blob/master/namesys/pb/namesys.proto
 
-function dht:dht_put (key, value)
+function dht:dht_put (key, filepath)
    if not key or type(key) ~= "string" then
       return false, "Invalid parameter #1 (string expected, got " .. type(key) .. ")"
-   elseif not value or type(value) ~= "string" then
-      return false, "Invalid parameter #2 (string expected, got " .. type(value) .. ")"
+   elseif not filepath or type(filepath) ~= "string" then
+      return false, "Invalid parameter #2 (string expected, got " .. type(filepath) .. ")"
    end
 
-   local res, http_ret, err = self.http:post("/api/v0/dht/put?arg=" .. key .. "&arg=" .. value)
+   local fattr, err = lfs.attributes(filepath)
+   if not fattr then return false, err end
+   if fattr.mode ~= "file" then
+      return false, "Invalid parameter (file expected, got " .. fattr.mode .. ")"
+   end
+
+
+   --Prepare files list before calling post_multipart_data
+
+   local filename = string.gsub(filepath, ".+/", "")
+   local tfiles = {}
+   tfiles[1] = {}
+   tfiles[1].filename = filename
+   tfiles[1].path = filepath
+   tfiles[1].mode = fattr.mode
+
+
+   local api_call = "/api/v0/dht/put?arg=" .. key
+   local res, http_ret = self.http:post_multipart_data(api_call, tfiles)
    if not res then
-      if err and not is_json(err) then return false, err end
-      return false, err and (json.decode(err)).Message or http_ret
+      return false, http_ret
    end
-
-   print(res)
 
    --Parse each line from answer
-
+   
    local t = {}
    for line in string.gmatch(res, "[^\n]+") do
       t[#t + 1] = json.decode(line)

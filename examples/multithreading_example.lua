@@ -23,7 +23,7 @@ f2 = lanes.gen("*", function ()
    local lipfs = require("luaipfs")
 
    local ipfs = lipfs:new()
-   local peer_id = "QmdcDLV5czbEBB1RoYvMxsYUt8KRp5g8GWKsg86cHb2ByD"
+   local peer_id = "QmNnooDu7bfjPFoTZYxMNLWUQJyrVwtbZg5gBMjTezGAJN"
 
    local peer, err = ipfs:dht_findpeer(peer_id)
    if not peer then
@@ -42,8 +42,8 @@ f3 = lanes.gen("*", function ()
 
    local ipfs = lipfs:new()
 
-   local key = "/ipns/QmQFwJEPLj3PVMEZKpk2oM96Teg3sKxMZSgA1RwYHmpgx2"
-   local data, err = ipfs:dht_get(key)
+   local key = "/ipns/k51qzi5uqu5dl8ovmsw032wd9manqo8asfwdw3m6e84qyng2qbspv97dap5bpd"
+   local data, err = ipfs:dht_get(key, "b64")
    if not data then 
       print(err)
       return false

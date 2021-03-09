@@ -170,10 +170,21 @@ ___
 
 ###### Args:
 > key (string) : key (multihash) to search for
-> mode (string) : mode can be "lua", "raw" (protobuf) or "b64" (base64)
+> mode (optional, string) : mode can be "lua", "raw" (protobuf) or "b64" (base64). Default to "raw".  
 
 ###### Return:
 > Arbitrary data value (IPNS record for /ipns in lua, raw or b64 encoding).
+
+```lua
+--For "lua" mode :
+ret = {
+   signature = "bin-string",
+   validityType = "string",
+   sequence = "number",
+   validity = "string",
+   value = "string"
+}
+```
 
 > Or false and an error.
 
@@ -188,7 +199,7 @@ ___
 
 ###### Args:
 > key (string) : peer id (or another user's public key hash) 
-> value (string) : IPNS record (protobuf .pb file)
+> value (string) : IPNS record (protobuf .pb filepath)
 
 ###### Return:
 > A list of peers/neighbors (node id) where we have store value in the dht. 

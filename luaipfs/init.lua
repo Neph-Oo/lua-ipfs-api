@@ -11,11 +11,15 @@
 local http = require("luaipfs.http")
 local json = require("json")
 local lfs = require("lfs")
+local b64 = require("base64")
+local pb = require("pb")
+local protoc = require("protoc")
 local base = require("luaipfs.base")
 local bitswap = require("luaipfs.bitswap")
 local dht = require("luaipfs.dht")
 local pin = require("luaipfs.pin")
 local swarm = require("luaipfs.swarm")
+local pb_schema = require("luaipfs.protobuf")
 
 
 
@@ -37,6 +41,10 @@ local ipfs = {
    dht_query = dht.dht_query,
    dht_provide = dht.dht_provide,
    bitswap_ledger = bitswap.bitswap_ledger,
+   b64_decode = b64.decode,
+   b64_encode = b64.encode,
+   pb_decode = pb.decode,
+   pb_encode = pb.encode
 }
 
 
@@ -59,6 +67,13 @@ function ipfs:new (o)
    --Attach new http to it
 
    o.http = http:new({server = o.server, port = o.port, timeout = o.timeout})
+
+
+   --Attach new protoc to it and compile/load protobuf schemas
+
+   o.protoc = protoc.new()
+   assert(o.protoc:load(pb_schema.ipns.data))
+
 
 
    return o
