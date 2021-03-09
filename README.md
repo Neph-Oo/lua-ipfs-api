@@ -11,7 +11,7 @@ You need go-ipfs running in the background to use this module. Currently, it has
 
 Via LuaRocks :
 
-`luarocks install luaipfs` [wip]  
+`luarocks install luaipfs`  
 
 
 Or compile it yourself (using make). You will need [libcurl](https://curl.se/libcurl/) (C library), [luajson](https://luarocks.org/modules/harningt/luajson), [lpeg](https://luarocks.org/modules/gvvaughan/lpeg), [luafilesystem](https://luarocks.org/modules/hisham/luafilesystem), [base64](https://luarocks.org/modules/iskolbin/base64) and [lua-protobuf](https://luarocks.org/modules/xavier-wang/lua-protobuf).
@@ -29,9 +29,9 @@ local ipfs = luaipfs:new()
 
 And download a file from ifps:
 ```lua
-local file = io.open("dot.gif", "w+")
+local file = io.open("quick-start", "w+")
 file:write(
-   ipfs:cat("/ipfs/QmbwqqE78Xba5z8j3CiaAMfPxjSNSda9Z9Rc5VhjyhLkt1")
+   ipfs:cat("/ipfs/QmQPeNsJPyVWPFDVHb77w8G42Fvo15z4bG2X8D2GhfbSXc/quick-start")
 )
 file:close()
 ```

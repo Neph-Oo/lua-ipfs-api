@@ -17,7 +17,7 @@ ___
 ###### Args:
 > opt (optional, table) : ipfs instance options. You can use timeout to set a limit (in seconds) for each api call.
 
-```
+```lua
 opt = {
    server = "localhost",
    port = 5001,
@@ -41,7 +41,7 @@ pin (optional, boolean) : pin file (default to true)
 ###### Return:
 > A lua table containing filename, size and hash (ipfs object) of uploaded file:  
 
-```
+```lua
 ret = {
    filename = "string",
    size = "string",
@@ -61,7 +61,7 @@ ___
 ###### Return:
 > A lua table contaning peer (short) id, data sent, data received, number of exchange and ledger value (debt ratio with that peer)
 
-```
+```lua
 ret = {
    peer = "string",
    exchanged = number,
@@ -103,7 +103,7 @@ ___
 
 > callback (function) : A callback function, see the following definition.  
 
-```
+```lua
 function callback (ipfs_path, data_chunk, datasize)
 ```
 
@@ -251,7 +251,7 @@ ___
 > ipfs_path (string) : Ipfs path   
 > callback (function) : A callback function, see the following definition.  
 
-```
+```lua
 function callback (ipfs_path, data_chunk, datasize)
 ```
 
@@ -276,7 +276,7 @@ ___
 ###### Return:
 > A table containing id, agentversion, protocolversion, publickey and addresses (list) of peer. If node_id is nil, function will return our own id's infos.
 
-```
+```lua
 ret = {
    id = "string",
    agentversion = "string",
@@ -305,7 +305,7 @@ ___
 ###### Return:
 > A table of files containing file info.   
 
-```
+```lua
 ret = {
    [1] = {
       name = "string",
@@ -346,7 +346,7 @@ ___
 If prot is set, each peer table will also have an entry for protocol in use.  
 If latency is set, each peer table will also have an entry for latency (can be 'n/a').
 
-```
+```lua
 ret = {
    {
       address = "string",
